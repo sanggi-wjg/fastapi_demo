@@ -1,3 +1,13 @@
+# FastAPI Demo
+FastAPI 샘플 개발 소스
+
+개발 환경
+```shell
+Python 3.10
+MySQL 8.0
+Redis
+requirement.txt 참조
+```
 
 ## Install
 ```shell
@@ -10,6 +20,11 @@ pip install uvicorn
 # config Settings .env 적용을 위해서 
 pip install pydantic[dotenv]
 ```
+
+## To Do List
+* [ ] MySQL, Redis Docker-compose 세팅
+* [ ] MySQL User REST API 개발
+* [ ] Redis User Session 연동 개발
 
 ### Help
 ```shell
