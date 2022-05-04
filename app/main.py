@@ -1,11 +1,8 @@
-from enum import Enum
+import time
 from functools import lru_cache
-from typing import Optional
 
 import uvicorn
 from fastapi import FastAPI
-from fastapi.params import Query
-from pydantic import BaseModel
 from starlette.requests import Request
 from starlette.responses import JSONResponse
 
@@ -14,11 +11,21 @@ from app.routers import users, home, jobs, items, files
 
 
 @lru_cache()
-def get_settings():
+def get_config_settings():
     return config.Settings()
 
 
 app = FastAPI()
+
+
+@app.middleware("http")
+async def ad_process_time_header(request: Request, call_next):
+    start_time = time.time()
+    response = await call_next(request)
+    response.headers["X-Process-Time"] = str(time.time() - start_time)
+    return response
+
+
 app.include_router(users.router)
 app.include_router(home.router)
 app.include_router(jobs.router)
