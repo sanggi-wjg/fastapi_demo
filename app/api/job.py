@@ -1,6 +1,3 @@
-####################################
-# Enum 예제
-####################################
 from enum import Enum
 
 from fastapi import APIRouter
@@ -11,6 +8,9 @@ router = APIRouter(
 )
 
 
+####################################
+# Enum 예제
+####################################
 class JobName(str, Enum):
     Student = "student"
     Teacher = "teacher"
