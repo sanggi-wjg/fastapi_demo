@@ -1,13 +1,31 @@
+import os.path
 from functools import lru_cache
-from os import environ
+from os import environ, path
 
 from pydantic import BaseSettings
 
+base_path = path.dirname(path.dirname(path.dirname(path.abspath(__file__))))
 
-class Config(BaseSettings):
-    title = "Fast API Demo"
+
+def get_env_filepath() -> str:
+    filepath = f"{base_path}/{environ.get('ENV_FILE', '.env.local')}"
+
+    if not os.path.exists(filepath):
+        raise Exception("not exist file : .env")
+
+    return filepath
+
+
+class Settings(BaseSettings):
+    base_dir: str = base_path
+
+    debug: bool
+    reload: bool
+    host: str
+    port: int = 8090
 
     app_name: str
+    app_desc: str
     admin_email: str
     items_per_user: int
 
@@ -19,21 +37,9 @@ class Config(BaseSettings):
     database_name: str
 
     class Config:
-        env_file = '../../.env'
-
-
-class LocalConfig(Config):
-    reload: bool = True
-
-
-class ProductionConfig(Config):
-    reload: bool = False
+        env_file = get_env_filepath()
 
 
 @lru_cache()
-def get_config():
-    env = environ.get("API_ENV", "local")
-    return dict(
-        production = ProductionConfig(),
-        local = LocalConfig,
-    ).get(env)
+def get_config_settings():
+    return Settings()
