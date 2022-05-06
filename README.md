@@ -35,6 +35,9 @@ uvicorn --help
 
 ### 접근 주소 리스트
 ```shell
-http://localhost:8091/redoc
-http://localhost:8091/docs
+.env 파일 PORT 확인
+
+http://localhost:8090
+http://localhost:8090/redoc
+http://localhost:8090/docs
 ```

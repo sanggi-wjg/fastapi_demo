@@ -2,7 +2,7 @@ from typing import List
 
 from sqlalchemy.orm import Session
 
-from app import models
+from app.db import models
 
 
 def find_user(db: Session, user_id: int) -> models.UserEntity:

@@ -1,10 +1,11 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
 
+from app.core.config import get_config_settings
 
 
 def create_database_engine():
-    settings = get_config()
+    settings = get_config_settings()
     match settings.database_engine:
         case "mysql":
             database_dsn = f"mysql+pymysql://{settings.database_user}:{settings.database_password}@{settings.database_host}:{settings.database_port}/{settings.database_name}"

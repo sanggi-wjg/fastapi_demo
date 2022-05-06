@@ -1,9 +1,7 @@
-from decimal import Decimal
-
-from sqlalchemy import Column, Integer, String, Boolean
+from sqlalchemy import Column, Integer, String, Boolean, Numeric
 from sqlalchemy.orm import relationship
 
-from .database import Base
+from app.db.database import Base
 
 
 ##################################################################################
@@ -33,8 +31,8 @@ class ItemEntity(Base):
     item_name = Column(String, index = True)
     item_description = Column(String, index = True)
 
-    item_price = Column(Decimal)
-    item_tax = Column(Decimal)
+    item_price = Column(Numeric(10, 2))
+    item_tax = Column(Numeric(10, 2))
 
     # 정방향 relation
     owner = relationship("User", back_populates = "items")

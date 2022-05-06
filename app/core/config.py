@@ -11,7 +11,7 @@ def get_env_filepath() -> str:
     filepath = f"{base_path}/{environ.get('ENV_FILE', '.env.local')}"
 
     if not os.path.exists(filepath):
-        raise Exception("not exist file : .env")
+        raise Exception("Not exist file: .env")
 
     return filepath
 
