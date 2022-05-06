@@ -1,9 +1,10 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
-from app import services
 from app.core.exceptions import UserNotFoundException
 from app.db.database import get_db
+from app.repository import user_repo
+from app.schema import user_schema
 
 router = APIRouter(
     tags = ["users"],
@@ -19,7 +20,7 @@ async def get_user(user_id: int):  # data 형 지정으로 pydantic 에서 검�
     return users[user_id]
 
 
-@router.get('/users/')
+@router.get('/users/', response_model = user_schema.User)
 async def get_users(offset: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    find_users = services.find_users(db, offset, limit)
+    find_users = user_repo.find_users(db, offset, limit)
     return find_users
