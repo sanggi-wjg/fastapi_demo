@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Boolean, Numeric, ForeignKey
+from sqlalchemy import Column, Integer, String, Boolean, Numeric, ForeignKey, UniqueConstraint
 from sqlalchemy.orm import relationship
 
 from app.db.database import Base
@@ -14,14 +14,17 @@ class UserEntity(Base):
     is_active = Column(Boolean, default = True)
 
     # 역방향 relation
-    items = relationship("Item", back_populates = "owner")
+    items = relationship("ItemEntity", back_populates = "owner")
 
     def __repr__(self):
-        return f"<User(id={self.id}) user_id=${self.user_email} is_active={self.is_active}>"
+        return f"<User(id={self.id}) user_id={self.user_email} is_active={self.is_active}>"
 
 
 class ItemEntity(Base):
     __tablename__ = 'items'
+    __table_args__ = (
+        UniqueConstraint('item_name', 'owner_id', name = 'unique_item_by_owner_id'),
+    )
 
     id = Column(Integer, primary_key = True, autoincrement = "auto", index = True)
 
@@ -32,7 +35,7 @@ class ItemEntity(Base):
 
     # 정방향 relation
     owner_id = Column(Integer, ForeignKey("users.id"), nullable = False)
-    owner = relationship("User", back_populates = "items")
+    owner = relationship("UserEntity", back_populates = "items")
 
     def __repr__(self):
-        return f"<User(id={self.id}) item_name=${self.item_name} item_description={self.item_description} item_price={self.item_price} item_description={self.item_tax}>"
+        return f"<User(id={self.id}) item_name={self.item_name} item_description={self.item_description} item_price={self.item_price} item_description={self.item_tax}>"

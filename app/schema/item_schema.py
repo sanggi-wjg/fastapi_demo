@@ -2,8 +2,8 @@ from pydantic import BaseModel
 
 
 class ItemBase(BaseModel):
-    name: str
-    description: str | None = None
+    item_name: str
+    item_description: str | None = None
 
 
 class ItemCreate(ItemBase):

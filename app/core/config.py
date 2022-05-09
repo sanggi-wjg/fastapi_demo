@@ -26,6 +26,8 @@ class Settings(BaseSettings):
 
     app_name: str
     app_desc: str
+    app_version: str
+
     admin_email: str
     items_per_user: int
 

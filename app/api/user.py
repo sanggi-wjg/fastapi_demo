@@ -20,7 +20,7 @@ async def get_user(user_id: int):  # data 형 지정으로 pydantic 에서 검�
     return users[user_id]
 
 
-@router.get('/users/', response_model = user_schema.User)
+@router.get('/users/', response_model = list[user_schema.User])
 async def get_users(offset: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     find_users = user_repo.find_users(db, offset, limit)
     return find_users

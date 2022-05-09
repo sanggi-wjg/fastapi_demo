@@ -4,11 +4,11 @@ from app.schema.item_schema import Item
 
 
 class UserBase(BaseModel):
-    email: str
+    user_email: str
 
 
 class UserCreate(UserBase):
-    password: str
+    user_hashed_password: str
 
 
 class User(UserBase):
