@@ -10,8 +10,7 @@ class UserEntity(Base):
     id = Column(Integer, primary_key = True, autoincrement = "auto", index = True)
 
     user_email = Column(String(50), unique = True, nullable = False, index = True)
-    user_hashed_password = Column(String, nullable = False)
-
+    user_hashed_password = Column(String(250), nullable = False)
     is_active = Column(Boolean, default = True)
 
     # 역방향 relation
@@ -26,9 +25,8 @@ class ItemEntity(Base):
 
     id = Column(Integer, primary_key = True, autoincrement = "auto", index = True)
 
-    item_name = Column(String, index = True)
-    item_description = Column(String, index = True)
-
+    item_name = Column(String(100), nullable = False, index = True)
+    item_description = Column(String(250), index = True)
     item_price = Column(Numeric(10, 2))
     item_tax = Column(Numeric(10, 2))
 
