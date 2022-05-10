@@ -41,8 +41,8 @@ async def create_new_user(user: user_schema.UserCreate, db: Session = Depends(ge
 
 # [PATCH] update user password
 @router.patch("/users/{user_id}", response_model = user_schema.User)
-async def change_password(user: user_schema.UserCreate, db: Session = Depends(get_db)):
-    update_user = user_repo.change_password(db, user)
+async def change_password(user_id: int, user: user_schema.UserPassword, db: Session = Depends(get_db)):
+    update_user = user_repo.change_password(db, user_id, user)
     return update_user
 
 

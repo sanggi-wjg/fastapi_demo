@@ -7,6 +7,14 @@ class UserBase(BaseModel):
     user_email: str
 
 
+class UserPassword(BaseModel):
+    password: str
+
+    @property
+    def user_hashed_password(self):
+        return f"ha{self.password}sh"
+
+
 class UserCreate(UserBase):
     password: str
 

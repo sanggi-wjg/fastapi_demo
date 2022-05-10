@@ -50,8 +50,8 @@ def create_user(db: Session, user: user_schema.UserCreate) -> models.UserEntity:
         return new_user
 
 
-def change_password(db: Session, user: user_schema.UserCreate) -> models.UserEntity:
-    find_user = find_user_by_email(db, user.user_email)
+def change_password(db: Session, user_id: int, user: user_schema.UserPassword) -> models.UserEntity:
+    find_user = find_user_by_id(db, user_id)
     find_user.user_hashed_password = user.user_hashed_password
 
     db.commit()
