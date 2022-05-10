@@ -11,6 +11,7 @@ Framework : FastAPI
 (Docs: https://fastapi.tiangolo.com/)
 
 Database : SqlAlchemy, Alembic
+(SqlAlchemy Docs: https://docs.sqlalchemy.org/en/14/orm/quickstart.html)
 (Alembic Docs: https://alembic.sqlalchemy.org/en/latest)
 (Alembic 설명 Blog : https://blog.neonkid.xyz/257)
 

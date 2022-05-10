@@ -3,7 +3,7 @@ from typing import List
 from sqlalchemy.exc import NoResultFound
 from sqlalchemy.orm import Session
 
-from app.core.exceptions import UserNotFoundException
+from app.core.exceptions import UserNotFoundException, DuplicateUserEmailException
 from app.db import models
 from app.schema import user_schema
 
@@ -34,14 +34,33 @@ def find_users(db: Session, offset: int = 0, limit: int = 100) -> List[models.Us
     return users
 
 
-def create_user(db: Session, user: user_schema.UserCreate):
-    user.hash_password()
+def create_user(db: Session, user: user_schema.UserCreate) -> models.UserEntity:
+    try:
+        _ = find_user_by_email(db, user.user_email)
+        raise DuplicateUserEmailException(user.user_email)
 
-    new_user = models.UserEntity(
-        user_email = user.user_email,
-        user_hashed_password = user.user_hashed_password
-    )
-    db.add(new_user)
+    except UserNotFoundException:
+        new_user = models.UserEntity(
+            user_email = user.user_email,
+            user_hashed_password = user.user_hashed_password
+        )
+        db.add(new_user)
+        db.commit()
+        db.refresh(new_user)
+        return new_user
+
+
+def change_password(db: Session, user: user_schema.UserCreate) -> models.UserEntity:
+    find_user = find_user_by_email(db, user.user_email)
+    find_user.user_hashed_password = user.user_hashed_password
+
     db.commit()
-    db.refresh(new_user)
-    return new_user
+    db.refresh(find_user)
+    return find_user
+
+
+def delete_user_by_id(db: Session, user_id: int) -> bool:
+    remove_user = find_user_by_id(db, user_id)
+    db.delete(remove_user)
+    db.commit()
+    return True

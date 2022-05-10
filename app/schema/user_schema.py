@@ -8,10 +8,11 @@ class UserBase(BaseModel):
 
 
 class UserCreate(UserBase):
-    user_hashed_password: str
+    password: str
 
-    def hash_password(self):
-        self.user_hashed_password = f"ha{self.user_hashed_password}sh"
+    @property
+    def user_hashed_password(self):
+        return f"ha{self.password}sh"
 
 
 class User(UserBase):
