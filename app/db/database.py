@@ -21,7 +21,7 @@ Engine = create_database_engine()
 SessionLocal = sessionmaker(autocommit = False, autoflush = False, bind = Engine)
 Base = declarative_base()
 
-Base.metadata.create_all(bind = Engine)
+# Base.metadata.create_all(bind = Engine)
 
 
 def get_db():

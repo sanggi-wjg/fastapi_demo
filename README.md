@@ -1,30 +1,30 @@
 # FastAPI Demo
-FastAPI 샘플 개발 소스
+A simple example of using FastAPI in Python3.   
 
-개발 환경
+## Dev conditions
+* Language : Python 3.10
+* Framework : FastAPI
+    * Docs: https://fastapi.tiangolo.com/
+* Database : MySQL 8.0
+    * SqlAlchemy
+        * SqlAlchemy Docs: https://docs.sqlalchemy.org/en/14/orm/quickstart.html
+    * Alembic(simple sample)
+        * Alembic Docs: https://alembic.sqlalchemy.org/en/latest
+        * Alembic 설명 Blog : https://blog.neonkid.xyz/257
+* etc
+    * Redis
+    * requirement.txt
+
+## Run with docker
 ```shell
-Python 3.10
-MySQL 8.0
-Redis
-
-Framework : FastAPI
-(Docs: https://fastapi.tiangolo.com/)
-
-Database : SqlAlchemy, Alembic
-(SqlAlchemy Docs: https://docs.sqlalchemy.org/en/14/orm/quickstart.html)
-(Alembic Docs: https://alembic.sqlalchemy.org/en/latest)
-(Alembic 설명 Blog : https://blog.neonkid.xyz/257)
-
-
-이외 패키지
-requirement.txt 참조
+comming soon
 ```
 
-### 접근 주소 리스트
-```shell
+
+
+## Access URLs
 .env 파일 PORT 확인
 
-http://localhost:8090
-http://localhost:8090/redoc
-http://localhost:8090/docs
-```
+* http://localhost:8090/~
+* http://localhost:8090/redoc
+* http://localhost:8090/docs

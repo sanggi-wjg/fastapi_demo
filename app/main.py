@@ -10,6 +10,9 @@ from app.api import home, file, item, job, user
 from app.core.config import get_config_settings
 from app.core.exceptions import UserNotFoundException, DuplicateUserEmailException
 
+from app.db import models
+from app.db.database import Engine
+
 # Settings
 settings = get_config_settings()
 
@@ -23,6 +26,10 @@ def create_app():
         title = settings.app_name,
         description = settings.app_desc,
     )
+
+    # Simple way create the database tables
+    if settings.debug:
+        models.Base.metadata.create_all(bind = Engine)
 
     # Middlewares
     @app.middleware("http")
