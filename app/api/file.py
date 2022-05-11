@@ -1,7 +1,9 @@
 from fastapi import APIRouter
 
+from app.api import RouterTags
+
 router = APIRouter(
-    tags = ["files"],
+    tags = [RouterTags.File],
     responses = { 404: { "detail": "not found" } }
 )
 

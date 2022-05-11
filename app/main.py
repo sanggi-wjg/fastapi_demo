@@ -8,7 +8,7 @@ from starlette.responses import JSONResponse
 
 from app.api import home, file, item, job, user
 from app.core.config import get_config_settings
-from app.core.exceptions import UserNotFoundException, DuplicateUserEmailException
+from app.core.exceptions import UserNotFoundException, DuplicateUserEmailException, CustomException
 
 from app.db import models
 from app.db.database import Engine
@@ -41,17 +41,24 @@ def create_app():
 
     # Exceptions
     @app.exception_handler(UserNotFoundException)
-    async def user_not_found_exception_handler(request: Request, exc: UserNotFoundException):
+    async def user_not_found_exception_handler(request: Request, e: UserNotFoundException):
         return JSONResponse(
             status_code = 404,
             content = { "detail": "User not found" }
         )
 
     @app.exception_handler(DuplicateUserEmailException)
-    async def user_duplicate_email_exception_handler(request: Request, exc: DuplicateUserEmailException):
+    async def user_duplicate_email_exception_handler(request: Request, e: DuplicateUserEmailException):
         return JSONResponse(
             status_code = 400,
             content = { "detail": "Duplicate user email" }
+        )
+
+    @app.exception_handler(CustomException)
+    async def custom_exception_handler(request: Request, e: CustomException):
+        return JSONResponse(
+            status_code = 418,
+            content = { "detail": f"{request.url}: {e.name} exception!" }
         )
 
     # Routers

@@ -10,3 +10,8 @@ class DuplicateUserEmailException(UserException):
 
 class UserNotFoundException(UserException):
     pass
+
+
+class CustomException(Exception):
+    def __init__(self, name):
+        self.name = name

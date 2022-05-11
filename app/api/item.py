@@ -6,12 +6,14 @@ from fastapi.params import Query, Depends
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
+from app.api import RouterTags
+from app.core.dependency.query_depend import page_parameter, PageQueryParameter
 from app.db.database import get_db
 from app.repository import item_repo
 from app.schema import item_schema
 
 router = APIRouter(
-    tags = ["items"],
+    tags = [RouterTags.Item],
     responses = { 404: { "detail": "not found" } }
 )
 
@@ -48,8 +50,8 @@ router = APIRouter(
 
 # [GET] find user items
 @router.get("/items", response_model = list[item_schema.Item])
-async def get_items(offset: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    find_items = item_repo.find_items(db, offset, limit)
+async def get_items(page_param: PageQueryParameter = Depends(page_parameter), db: Session = Depends(get_db)):
+    find_items = item_repo.find_items(db, page_param.offset, page_param.limit)
     return find_items
 
 

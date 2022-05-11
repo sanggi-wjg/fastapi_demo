@@ -12,7 +12,7 @@ A simple example of using FastAPI in Python3.
         * Alembic Docs: https://alembic.sqlalchemy.org/en/latest
         * Alembic 설명 Blog : https://blog.neonkid.xyz/257
 * etc
-    * Redis
+    * Redis (not yet)
     * requirement.txt
 
 ## Run with docker
@@ -23,7 +23,7 @@ comming soon
 
 
 ## Access URLs
-.env 파일 PORT 확인
+check port `in .env file` 
 
 * http://localhost:8090/~
 * http://localhost:8090/redoc

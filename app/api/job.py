@@ -2,8 +2,10 @@ from enum import Enum
 
 from fastapi import APIRouter
 
+from app.api import RouterTags
+
 router = APIRouter(
-    tags = ["jobs"],
+    tags = [RouterTags.Job],
     responses = { 404: { "detail": "not found" } }
 )
 
