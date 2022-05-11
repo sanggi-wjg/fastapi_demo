@@ -34,7 +34,7 @@ async def get_user(user_email: str, db: Session = Depends(get_db)):
 
 
 # [GET] find all user by paginated
-@router.get('/users/', response_model = list[user_schema.User])
+@router.get('/users', response_model = list[user_schema.User])
 async def get_users(page_param: PageQueryParameter = Depends(page_parameter), db: Session = Depends(get_db)):
     find_users = user_repo.find_users(db, page_param.offset, page_param.limit)
     return find_users

@@ -29,6 +29,10 @@ class Settings(BaseSettings):
     host: str
     port: int = 8090
 
+    cors_origins: list
+    trust_host: list
+    gzip_minimum_size: int
+
     database_engine: str
     database_user: str
     database_password: str

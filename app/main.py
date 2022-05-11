@@ -3,6 +3,7 @@ import time
 import uvicorn
 
 from fastapi import FastAPI
+from starlette.middleware.cors import CORSMiddleware
 from starlette.middleware.gzip import GZipMiddleware
 from starlette.middleware.trustedhost import TrustedHostMiddleware
 from starlette.requests import Request
@@ -32,11 +33,12 @@ def create_app():
     if settings.debug:
         models.Base.metadata.create_all(bind = Engine)
 
-    # Middlewares
+    # Middlewares (Some of middleware only activated when not debug mode)
     # app.add_middleware(HTTPSRedirectMiddleware) # Any incoming requests to http or ws will be redirected to the secure scheme instead.
-    app.add_middleware(GZipMiddleware, minimum_size = 500)  # Handles GZip responses for any request that includes "gzip" in the Accept-Encoding header.
+    app.add_middleware(GZipMiddleware, minimum_size = settings.gzip_minimum_size)  # Handles GZip responses for any request that includes "gzip" in the Accept-Encoding header.
     app.add_middleware(TrustedHostMiddleware,
-                       allowed_hosts = ["localhost", "*.localhost"])  # Enforces that all incoming requests have a correctly set Host header, in order to guard against HTTP Host Header attacks.
+                       allowed_hosts = settings.trust_host)  # Enforces that all incoming requests have a correctly set Host header, in order to guard against HTTP Host Header attacks.
+    app.add_middleware(CORSMiddleware, allow_origins = settings.cors_origins, allow_credentials = True, allow_methods = ["*"], allow_headers = ["*"])
 
     @app.middleware("http")
     async def ad_process_time_header(request: Request, call_next):
