@@ -19,17 +19,15 @@ def get_env_filepath() -> str:
 class Settings(BaseSettings):
     base_dir: str = base_path
 
+    app_name: str
+    app_desc: str
+    app_version: str
+    app_admin_email: str
+
     debug: bool
     reload: bool
     host: str
     port: int = 8090
-
-    app_name: str
-    app_desc: str
-    app_version: str
-
-    admin_email: str
-    items_per_user: int
 
     database_engine: str
     database_user: str

@@ -3,12 +3,13 @@ import time
 import uvicorn
 
 from fastapi import FastAPI
+from starlette.middleware.gzip import GZipMiddleware
+from starlette.middleware.trustedhost import TrustedHostMiddleware
 from starlette.requests import Request
-from starlette.responses import JSONResponse
 
 from app.api import home, file, item, job, user
 from app.core.config import get_config_settings
-from app.core.exceptions import UserNotFoundException, DuplicateUserEmailException, CustomException
+from app.core.exceptions import UserNotFoundException, DuplicateUserEmailException, CustomException, custom_exception_handler, user_not_found_exception_handler, user_duplicate_email_exception_handler
 
 from app.db import models
 from app.db.database import Engine
@@ -27,11 +28,16 @@ def create_app():
         description = settings.app_desc,
     )
 
-    # Simple way create the database tables
+    # Simple way create the database tables. Or you can use Alembic package.
     if settings.debug:
         models.Base.metadata.create_all(bind = Engine)
 
     # Middlewares
+    # app.add_middleware(HTTPSRedirectMiddleware) # Any incoming requests to http or ws will be redirected to the secure scheme instead.
+    app.add_middleware(GZipMiddleware, minimum_size = 500)  # Handles GZip responses for any request that includes "gzip" in the Accept-Encoding header.
+    app.add_middleware(TrustedHostMiddleware,
+                       allowed_hosts = ["localhost", "*.localhost"])  # Enforces that all incoming requests have a correctly set Host header, in order to guard against HTTP Host Header attacks.
+
     @app.middleware("http")
     async def ad_process_time_header(request: Request, call_next):
         start_time = time.time()
@@ -39,27 +45,10 @@ def create_app():
         response.headers["X-Process-Time"] = str(time.time() - start_time)
         return response
 
-    # Exceptions
-    @app.exception_handler(UserNotFoundException)
-    async def user_not_found_exception_handler(request: Request, e: UserNotFoundException):
-        return JSONResponse(
-            status_code = 404,
-            content = { "detail": "User not found" }
-        )
-
-    @app.exception_handler(DuplicateUserEmailException)
-    async def user_duplicate_email_exception_handler(request: Request, e: DuplicateUserEmailException):
-        return JSONResponse(
-            status_code = 400,
-            content = { "detail": "Duplicate user email" }
-        )
-
-    @app.exception_handler(CustomException)
-    async def custom_exception_handler(request: Request, e: CustomException):
-        return JSONResponse(
-            status_code = 418,
-            content = { "detail": f"{request.url}: {e.name} exception!" }
-        )
+    # Exception Handlers
+    app.add_exception_handler(UserNotFoundException, user_not_found_exception_handler)
+    app.add_exception_handler(DuplicateUserEmailException, user_duplicate_email_exception_handler)
+    app.add_exception_handler(CustomException, custom_exception_handler)
 
     # Routers
     app.include_router(home.router)
