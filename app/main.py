@@ -27,9 +27,11 @@ def create_app():
         debug = settings.debug,
         title = settings.app_name,
         description = settings.app_desc,
+        root_path = settings.base_dir,
+        contact = dict(name = settings.app_admin_name, email = settings.app_admin_email),
     )
 
-    # Simple way create the database tables. Or you can use Alembic package.
+    # Simple way create the database tables. Or if you know Alembic, you can use Alembic package.
     if settings.debug:
         models.Base.metadata.create_all(bind = Engine)
 

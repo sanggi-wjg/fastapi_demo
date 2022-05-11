@@ -22,6 +22,7 @@ class Settings(BaseSettings):
     app_name: str
     app_desc: str
     app_version: str
+    app_admin_name: str
     app_admin_email: str
 
     debug: bool
