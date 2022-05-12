@@ -8,9 +8,13 @@ from starlette.middleware.gzip import GZipMiddleware
 from starlette.middleware.trustedhost import TrustedHostMiddleware
 from starlette.requests import Request
 
-from app.api import home, file, item, job, user
+from app.api import home, file, item, job, user, auth
 from app.core.config import get_config_settings
-from app.core.exceptions import UserNotFoundException, DuplicateUserEmailException, CustomException, custom_exception_handler, user_not_found_exception_handler, user_duplicate_email_exception_handler
+from app.core.exceptions import (
+    UserNotFoundException, DuplicateUserEmailException, CustomException, custom_exception_handler, user_not_found_exception_handler,
+    user_duplicate_email_exception_handler,
+    NotExistUserEmail, not_exist_user_email_handler, BadCredentials, bad_credentials_handler
+)
 
 from app.db import models
 from app.db.database import Engine
@@ -27,7 +31,6 @@ def create_app():
         debug = settings.debug,
         title = settings.app_name,
         description = settings.app_desc,
-        root_path = settings.base_dir,
         contact = dict(name = settings.app_admin_name, email = settings.app_admin_email),
     )
 
@@ -53,6 +56,8 @@ def create_app():
     app.add_exception_handler(UserNotFoundException, user_not_found_exception_handler)
     app.add_exception_handler(DuplicateUserEmailException, user_duplicate_email_exception_handler)
     app.add_exception_handler(CustomException, custom_exception_handler)
+    app.add_exception_handler(NotExistUserEmail, not_exist_user_email_handler)
+    app.add_exception_handler(BadCredentials, bad_credentials_handler)
 
     # Routers
     app.include_router(home.router)
@@ -60,6 +65,7 @@ def create_app():
     app.include_router(item.router)
     app.include_router(job.router)
     app.include_router(user.router)
+    app.include_router(auth.router)
 
     return app
 

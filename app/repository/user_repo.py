@@ -29,6 +29,17 @@ def find_user_by_email(db: Session, user_email: str) -> models.UserEntity:
         raise UserNotFoundException()
 
 
+def find_user_by_credentials(db: Session, user_email: str, user_password: str):
+    try:
+        user = db.query(models.UserEntity).filter(
+            models.UserEntity.user_email == user_email,
+            models.UserEntity.user_hashed_password == user_password
+        ).one()
+        return user
+    except NoResultFound:
+        raise UserNotFoundException()
+
+
 def find_users(db: Session, offset: int = 0, limit: int = 100) -> List[models.UserEntity]:
     users = db.query(models.UserEntity).offset(offset).limit(limit).all()
     return users

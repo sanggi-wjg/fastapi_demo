@@ -3,6 +3,7 @@ class QueryParameter(object):
 
 
 class PageQueryParameter(QueryParameter):
+    __slots__ = ['offset', 'limit']
 
     def __init__(self, offset: int = 0, limit: int = 100):
         self.offset = offset
