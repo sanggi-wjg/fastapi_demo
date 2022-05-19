@@ -41,6 +41,11 @@ class Settings(BaseSettings):
     database_port: str
     database_name: str
 
+    # secret key, to get a string like this run: openssl rand -hex 32
+    secret_key: str
+    algorithm: str
+    access_token_expire_minutes: int
+
     class Config:
         env_file = get_env_filepath()
 

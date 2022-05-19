@@ -1,3 +1,4 @@
+import logging
 import time
 
 import uvicorn
@@ -13,7 +14,7 @@ from app.core.config import get_config_settings
 from app.core.exceptions import (
     UserNotFoundException, DuplicateUserEmailException, CustomException, custom_exception_handler, user_not_found_exception_handler,
     user_duplicate_email_exception_handler,
-    NotExistUserEmail, not_exist_user_email_handler, BadCredentials, bad_credentials_handler
+    NotExistUserEmail, not_exist_user_email_handler, BadCredentials, bad_credentials_handler, JWTBadCredentials, jwt_bad_credentials_handler
 )
 
 from app.db import models
@@ -37,6 +38,9 @@ def create_app():
     # Simple way create the database tables. Or if you know Alembic, you can use Alembic package.
     if settings.debug:
         models.Base.metadata.create_all(bind = Engine)
+        # sqlalchemy set logging level
+        logging.basicConfig()
+        logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
 
     # Middlewares (Some of middleware only activated when not debug mode)
     # app.add_middleware(HTTPSRedirectMiddleware) # Any incoming requests to http or ws will be redirected to the secure scheme instead.
@@ -58,6 +62,7 @@ def create_app():
     app.add_exception_handler(CustomException, custom_exception_handler)
     app.add_exception_handler(NotExistUserEmail, not_exist_user_email_handler)
     app.add_exception_handler(BadCredentials, bad_credentials_handler)
+    app.add_exception_handler(JWTBadCredentials, jwt_bad_credentials_handler)
 
     # Routers
     app.include_router(home.router)

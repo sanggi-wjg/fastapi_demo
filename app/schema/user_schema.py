@@ -1,5 +1,7 @@
+from passlib.context import CryptContext
 from pydantic import BaseModel
 
+from app.core.auth.auth_util import hash_password
 from app.schema.item_schema import Item
 
 
@@ -12,7 +14,7 @@ class UserPassword(BaseModel):
 
     @property
     def user_hashed_password(self):
-        return f"ha{self.password}sh"
+        return hash_password(self.password)
 
 
 class UserCreate(UserBase, UserPassword):
