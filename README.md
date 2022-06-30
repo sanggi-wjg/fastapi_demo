@@ -15,6 +15,10 @@ A simple example of using FastAPI in Python3.
     * Redis (not yet)
     * requirement.txt
 
+## Run
+1. create and set `.env.local` file
+2. run app/main.py 
+
 ## Run with docker
 ```shell
 comming soon
