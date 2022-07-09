@@ -9,7 +9,7 @@ from starlette.middleware.gzip import GZipMiddleware
 from starlette.middleware.trustedhost import TrustedHostMiddleware
 from starlette.requests import Request
 
-from app.api import home, file, item, job, user, auth
+from app.api import home, file, item, job, user, auth, tts
 from app.core.config import get_config_settings
 from app.core.exceptions import (
     UserNotFoundException, DuplicateUserEmailException, CustomException, custom_exception_handler, user_not_found_exception_handler,
@@ -71,6 +71,7 @@ def create_app():
     app.include_router(job.router)
     app.include_router(user.router)
     app.include_router(auth.router)
+    app.include_router(tts.router)
 
     return app
 

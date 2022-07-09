@@ -49,6 +49,13 @@ class Settings(BaseSettings):
     class Config:
         env_file = get_env_filepath()
 
+    @property
+    def media_dir(self):
+        dir_path = os.path.join(self.base_dir, "media")
+        if not os.path.exists(dir_path):
+            os.mkdir(dir_path)
+        return dir_path
+
 
 @lru_cache()
 def get_config_settings():

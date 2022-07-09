@@ -8,3 +8,4 @@ class RouterTags(str, Enum):
     Job = "Jobs"
     User = "Users"
     Auth = "Auths"
+    TTS = "TTS"

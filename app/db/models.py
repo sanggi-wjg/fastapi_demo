@@ -39,3 +39,16 @@ class ItemEntity(Base):
 
     def __repr__(self):
         return f"<User(id={self.id}) item_name={self.item_name} item_description={self.item_description} item_price={self.item_price} item_description={self.item_tax}>"
+
+
+class TTSRecordEntity(Base):
+    __tablename__ = 'tts_records'
+    __table_args__ = (
+        UniqueConstraint('record_text', name = 'unique_tts_records_record_text'),
+    )
+
+    id = Column(Integer, primary_key = True, autoincrement = "auto", index = True)
+    record_text = Column(String(100), nullable = False, index = True)
+
+    def __repr__(self):
+        return f"<TTSRecordEntity (id={self.id}) record_text={self.record_text}>"
