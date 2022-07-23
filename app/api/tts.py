@@ -1,8 +1,10 @@
 from fastapi import APIRouter, Depends
+from redis.client import Redis
 from sqlalchemy.orm import Session
 from fastapi.responses import FileResponse
 
 from app.api import RouterTags
+from app.core.cache import get_redis
 from app.core.lib.tts_util import create_tts_file, get_tts_save_path
 from app.db.database import get_db
 from app.repository import tts_record_repo
@@ -31,4 +33,12 @@ async def get_tts_mp3(text: str, db: Session = Depends(get_db)):
         tts_record_repo.create_tts_record(db, text)
         create_tts_file(text)
 
+    return get_tts_save_path(text)
+
+
+@router.get("/tts-redis/{text}", response_class = FileResponse)
+async def get_tts_mp3_with_redis(text: str, redis: Redis = Depends(get_redis)):
+    add_result = redis.sadd("tts", text)
+    if add_result == 1:  # 0: set에 있음  /  1: set에 없음
+        create_tts_file(text)
     return get_tts_save_path(text)

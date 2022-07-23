@@ -41,6 +41,9 @@ class Settings(BaseSettings):
     database_port: str
     database_name: str
 
+    redis_host: str
+    redis_port: int
+
     # secret key, to get a string like this run: openssl rand -hex 32
     secret_key: str
     algorithm: str

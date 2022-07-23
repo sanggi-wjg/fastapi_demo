@@ -8,6 +8,8 @@ A simple example of using FastAPI in Python3.
 * Database : MySQL 8.0
     * SqlAlchemy
         * SqlAlchemy Docs: https://docs.sqlalchemy.org/en/14/orm/quickstart.html
+        * SQLAlchemy의 연결 풀링 이해하기
+          * https://spoqa.github.io/2018/01/17/connection-pool-of-sqlalchemy.html
     * Alembic(simple sample)
         * Alembic Docs: https://alembic.sqlalchemy.org/en/latest
         * Alembic 설명 Blog : https://blog.neonkid.xyz/257

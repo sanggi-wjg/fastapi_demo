@@ -9,7 +9,13 @@ def create_database_engine():
     match settings.database_engine:
         case "mysql":
             database_dsn = f"mysql+pymysql://{settings.database_user}:{settings.database_password}@{settings.database_host}:{settings.database_port}/{settings.database_name}"
-            return create_engine(database_dsn, isolation_level = 'REPEATABLE READ', echo = False)
+            return create_engine(
+                database_dsn,
+                isolation_level = 'REPEATABLE READ',
+                pool_size = 100,
+                max_overflow = 200,
+                echo = False
+            )
         case "sqlite":
             database_dsn = "sqlite:///:memory:"
             return create_engine(database_dsn)
@@ -20,6 +26,7 @@ def create_database_engine():
 Engine = create_database_engine()
 SessionLocal = sessionmaker(autocommit = False, autoflush = False, bind = Engine)
 Base = declarative_base()
+
 
 # Base.metadata.create_all(bind = Engine)
 
